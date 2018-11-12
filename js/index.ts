@@ -3,7 +3,6 @@ window.onload = init;
 function init(){
   let world;
 
-
   matter();
   pixi();
 
@@ -29,7 +28,7 @@ function init(){
 
       Matter.Runner.run(runner,engine);
       Matter.Engine.run(engine);
-      //Matter.Render.run(render);
+      Matter.Render.run(render);
     };
 
     function pixi(){
@@ -40,58 +39,26 @@ function init(){
 
         var loader = new PIXI.loaders.Loader();
 
-        var icons = [];
 
         var game = {
           "init":function (){
-            loader.add(["images/bg.png","images/icon.png"]);
-            loader.load(game.start);
+            /* this is loader */
           },
           "start":function (){
-            var bg = PIXI.Sprite.fromImage("images/bg.png");
-            app.stage.addChild(bg);
+            /* this is bgView*/
 
             game.staticRender();
-            game.createIcon();
+            game.createView();
           },
           "staticRender":function (){
-            var rect_1 = Matter.Bodies.rectangle(206,540,20,1105,{isStatic:true,angle:(Math.PI/180)*-14.6});
-            var rect_2 = Matter.Bodies.rectangle(320,903,640,20,{isStatic:true,angle:(Math.PI/180)*5});
-
-            Matter.World.add(world,[rect_1,rect_2]);
+            /*this is matter.js static view*/
           },
-          "createIcon":function (){
-            class Icon extends PIXI.Sprite{
-              x:number;
-              y:number;
-              body:any;
-              constructor(_url:string,_x:number,_y:number){
-                super();
-                this.texture = PIXI.Texture.fromImage(_url);
-                this.x = _x;
-                this.y = _y;
-                this.anchor.set(0.5);
-                this.body = Matter.Bodies.rectangle(this.x,this.y,100,82);
-              }
-            }
-
-            for(let i = 0;i < 10;i++){
-              let _icon = new Icon("images/icon.png",Math.floor(150 + Math.random()*300),i*82*-1);
-              icons.push(_icon);
-              app.stage.addChild(_icon);
-              Matter.World.add(world,_icon.body);
-            };
+          "createView":function (){
+            /*this is pixiView*/
             game.sync();
           },
           'sync':function (){
-              app.ticker.add(p2mRender);
-              function p2mRender(){
-                icons.forEach(function (icon){
-                  icon.position.x = icon.body.position.x;
-                  icon.position.y = icon.body.position.y;
-                  icon.rotation = icon.body.angle;
-                });
-              };
+            /*this is data Sync*/
           }
         }
 
